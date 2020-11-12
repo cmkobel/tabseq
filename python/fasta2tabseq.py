@@ -3,22 +3,58 @@
 import sys
 
 
-__author__ = "Carl M. Kobel"
-__version__ = "0.1"
+__author__ = "Carl Mathias Kobel"
+__version__ = "0.1" # Not tested enough
+
+
+def check_non_negative_int(value):
+    ivalue = int(value)
+    if ivalue < 0:
+        raise argparse.ArgumentTypeError("%s is an invalid positive int value" % value)
+    return ivalue
+
+
+
+# argparser stuff
+parser = argparse.ArgumentParser(prog = "fasta2tabseq.py", description='Convert .fasta to .tabseq, from stdin to stdout. The fasta record is written to the part column.')
+parser.add_argument('--version', action='version', version=f"tabseq2fasta.py v{__version__}")
+
+# Options to modify columns
+parser.add_argument('--fill_sample', nargs='?', help='overwrite the sample data with this value', default = "") 
+#parser.add_argument('--fill_part', nargs='?', help='overwrite the part data with this value', default = False) # disabled, the record is saved in the part field.
+parser.add_argument('--fill_comment', nargs='?', help='overwrite the comment data with this value', default = "")
+
+# Options to remove data
+# group = parser.add_argument_group('optionally, omit data from being written to the fasta records')
+# group.add_argument("--clear_sample", help = "clear sample data", action = "store_true")
+# group.add_argument("--clear_part", help = "clear part data", action = "store_true")
+# group.add_argument("--clear_comment", help = "clear comment data", action = "store_true")
+# group.add_argument("--clear_all", help = "shortcut for the above clear-arguments", action = "store_true")
+# 
+# # Option to enumerate the records, and even specify the number of padded zeros
+# parser.add_argument("--enumerate", help = "prefix the sequences with numbers, optionally specify the number of padded zeros, defaults to 3 padded zeros", nargs = "?", type = check_non_negative_int, metavar = "number of zeros", default = False, const = 3)
+# 
+# # 
+# # 
+# parser.add_argument("--separator", help = "choose a symbol to separate the fasta records, defaults to \"|\"", default = "|")
+
+
+
+args = parser.parse_args()
+
+
 
 
 def eprint(*args, **kwargs):
     print(*args, **kwargs, file = sys.stderr)
  
 eprint(f"""
-    This is the fasta2tabseq.py conversion script,
     compatible with multi line fasta files.
     Parsing fasta from stdin...
 """)
 
 # TODO: Implement --fill_sample
-fill_sample = ""
-fill_sample = sys.argv[1].strip()
+
 
 
 # Print the header
@@ -26,7 +62,7 @@ print('sample', 'part', 'comment', 'sequence', sep = '\t')
 
 
 def write(fasta_header, dna):
-    print(f"{fill_sample}\t{fasta_header}\t\t{dna}")
+    print(f"{args.fill_sample}\t{fasta_header}\t{args.fill_comment}\t{dna}")
 
 
 fasta_header = ""

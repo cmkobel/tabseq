@@ -5,7 +5,7 @@ import sys
 import argparse
 
 __author__ = "Carl Mathias Kobel"
-__version__ = "0.0" # Not tested enough
+__version__ = "0.1" # Not tested enough
 
 
 def check_non_negative_int(value):
