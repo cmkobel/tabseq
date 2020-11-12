@@ -1,82 +1,91 @@
-library(tidyverse)
-
-VERSION = "0.0.2"
-
-library(magrittr)
-#needs: dplyr, string, tidyr
-
-
+#' Read a fasta file and convert it to tabseq
+#' @export
+#' @import dplyr stringr tidyr
+#' @description Takes the path to a fasta file. Loads the fasta file, and converts it to a tabseq table.
+#' @param file The path to a fasta-file
+#' @param from_fasta A boolean designating whether the file path points to a fasta-file
+#' @return A tibble containing the respective records and sequences from the fasta-file, represented in the tabseq format.
+#' @examples
+#' #tabseq = read_tabseq(file = "extdata/test2.fa")
 read_tabseq = function(file, from_fasta = T) {
-    
-    
+
+
     if (from_fasta) {
         # Open the file
         cat(paste("reading", file, "as fasta", "\n"))
         file_open = scan(file, what="character", sep=NULL, quiet = T)
-        
-        
-        rv = dplyr::tibble(raw = file_open) %>% 
-            
+
+
+        dplyr::tibble(raw = file_open) %>%
+
             # detect record headers
-            dplyr::mutate(header = ifelse(stringr::str_sub(raw, 1,1) == ">", T, F)) %>% 
-            
+            dplyr::mutate(header = ifelse(stringr::str_sub(raw, 1,1) == ">", T, F)) %>%
+
             # enumerate the record headers and fill the downwards through the sequence lines
             dplyr::mutate(header_num = ifelse(header, seq.int(nrow(.)), NA)) %>% # needs no sorting
-            tidyr::fill(header_num, .direction = "down") %>% 
-            
+            tidyr::fill(header_num, .direction = "down") %>%
+
             # Collect the lines for each record
-            dplyr::group_by(header_num) %>% 
+            dplyr::group_by(header_num) %>%
             dplyr::summarize(part = stringr::str_sub(raw[1], 2),
-                             sequence = paste(raw[-1], collapse = ""), .groups = "drop") %>% 
-            
+                             sequence = paste(raw[-1], collapse = ""), .groups = "drop") %>%
+
             dplyr::mutate(comment = paste("record", dplyr::row_number(header_num))) %>%  # reset header nums
-            
+
             dplyr::transmute(sample = file, part, comment, sequence)
-        
-        print(rv)
-        rv
-        
+
+
+
+
     }
-    
+
 }
 
-out = read_tabseq(file = "test2.fa")
-
-
+#' Write a tabseq table to disk in fasta-format.
+#' @export
+#' @import dplyr tidyr stringr
+#' @description Takes a tabseq table, and saves it to disk in the fasta-format.
+#' @param x The tabseq table to save
+#' @param file The path to a wanted fasta-file
+#' @param to_fasta dummy boolean what
+#' @param record_format nopercA string designating how to encode the records in the fasta file. Defaults to "\%part", but may be a combination of all metadata columns including custom separators i.e. "\%sample|\%part|\%comment.
+#' @return Saves the content to disk, and returns the tibble before it is converted to a raw string.
+#' @examples
+#'
+#' #my_sequences = tabseq::read_tabseq(file = "extdata/test2.fa")
+#' #tabseq::write_tabseq(my_sequences, "extdata/output.fasta")
 write_tabseq = function(x, file, record_format = "%part", to_fasta = T) {
-    
+
     if (to_fasta) {
-        
+
         cat(paste("writing to file ", file, "as fasta", "\n"))
         cat(paste("using the following record_format:", record_format, "\n"))
-        
+
         # format as "fasta"
         formatted = x %>%
-            mutate(record_format = record_format) %>% 
-            transmute(record = str_replace_all(record_format, "%sample", sample) %>% 
-                          str_replace_all("%part", part) %>% 
-                          str_replace_all("%comment", comment), sequence = sequence)
-        
-        print(formatted)
-    
-        
-    
+            dplyr::mutate(record_format = record_format) %>%
+            dplyr::transmute(record = stringr::str_replace_all(record_format, "%sample", sample) %>%
+                          stringr::str_replace_all("%part", part) %>%
+                          stringr::str_replace_all("%comment", comment), sequence = sequence)
+
+
+
+
+
         # Interleave
         interleave = as.vector(rbind(paste0(">", formatted$record), formatted$sequence))
-        
-        
+
+
         fileConn<-file(file)
         writeLines(interleave, fileConn)
         close(fileConn)
-        
+
         #cat("\n")
         #cat(paste0(">", formatted$record, "\t", str_sub(formatted$sequence, 1, 10), "...", collapse = "\n"))
+        formatted
     }
-    
-}
 
-x = out
-write_tabseq(x, "output.fasta")
+}
 
 
 
