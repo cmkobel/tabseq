@@ -1,12 +1,14 @@
 #' Read a fasta file and convert it to tabseq
 #' @export
-#' @import dplyr stringr tidyr
+#' @import dplyr stringr tidyr readr
 #' @description Takes the path to a fasta file. Loads the fasta file, and converts it to a tabseq table.
 #' @param file The path to a fasta-file
 #' @param from_fasta A boolean designating whether the file path points to a fasta-file
 #' @return A tibble containing the respective records and sequences from the fasta-file. Represented in the tabseq format.
 #' @examples
-#' #tabseq = read_tabseq(file = "extdata/test2.fa")
+#' a = system.file("extdata", "test2.fa", package = "readr")
+#' a
+#' tabseq = read_tabseq(file = a)
 read_tabseq = function(file, from_fasta = T) {
 
 
