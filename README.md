@@ -87,6 +87,15 @@ At the time of writing, only one such scripts exists: `tabseq2fasta.py`
 This file will convert the tabseq to fasta, by the arguments given.
 
 
+# Installation of R-package (all platforms)
+Install and load devtools, then install
+
+```{R}
+install.packages("devtools")
+library(devtools)
+install_github("cmkobel/tabseq")
+```
+
 
 # Installation of cli-tools (lunix)
 
