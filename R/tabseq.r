@@ -15,13 +15,13 @@ read_tabseq = function(file, from_fasta = T) {
     if (from_fasta) {
         # Open the file
         cat(paste("reading", file, "as fasta", "\n"))
-        file_open = scan(file, what="character", sep=NULL, quiet = T)
+        file_open = scan(file, what = "character", sep = NULL, quiet = T)
 
 
         dplyr::tibble(raw = file_open) %>%
 
             # detect record headers
-            dplyr::mutate(header = ifelse(stringr::str_sub(raw, 1,1) == ">", T, F)) %>%
+            dplyr::mutate(header = if_else(stringr::str_sub(raw, 1,1) == ">", T, F)) %>%
 
             # enumerate the record headers and fill the downwards through the sequence lines
             dplyr::mutate(header_num = ifelse(header, seq.int(nrow(.)), NA)) %>% # needs no sorting
