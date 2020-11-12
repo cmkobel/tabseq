@@ -11,15 +11,15 @@ write_tabseq(x, file, record_format = "\%part", to_fasta = T)
 
 \item{file}{The path to a wanted fasta-file}
 
-\item{record_format}{nopercA string designating how to encode the records in the fasta file. Defaults to "\%part", but may be a combination of all metadata columns including custom separators i.e. "\%sample|\%part|\%comment.}
+\item{record_format}{A string designating how to encode the records in the fasta file written. Defaults to "\%part", but may be a combination of all metadata columns including custom separators i.e. "\%sample|\%part|\%comment.}
 
-\item{to_fasta}{dummy boolean what}
+\item{to_fasta}{A boolean designating whether the file should be written in the fasta format.}
 }
 \value{
-Saves the content to disk, and returns the tibble before it is converted to a raw string.
+Saves the content to disk, and returns a tibble which represents what is being written to disk.
 }
 \description{
-Takes a tabseq table, and saves it to disk in the fasta-format.
+Takes a tabseq table, and saves it to disk in the fasta format.
 }
 \examples{
 

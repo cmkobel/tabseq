@@ -4,7 +4,7 @@
 #' @description Takes the path to a fasta file. Loads the fasta file, and converts it to a tabseq table.
 #' @param file The path to a fasta-file
 #' @param from_fasta A boolean designating whether the file path points to a fasta-file
-#' @return A tibble containing the respective records and sequences from the fasta-file, represented in the tabseq format.
+#' @return A tibble containing the respective records and sequences from the fasta-file. Represented in the tabseq format.
 #' @examples
 #' #tabseq = read_tabseq(file = "extdata/test2.fa")
 read_tabseq = function(file, from_fasta = T) {
@@ -44,12 +44,12 @@ read_tabseq = function(file, from_fasta = T) {
 #' Write a tabseq table to disk in fasta-format.
 #' @export
 #' @import dplyr tidyr stringr
-#' @description Takes a tabseq table, and saves it to disk in the fasta-format.
+#' @description Takes a tabseq table, and saves it to disk in the fasta format.
 #' @param x The tabseq table to save
 #' @param file The path to a wanted fasta-file
-#' @param to_fasta dummy boolean what
-#' @param record_format nopercA string designating how to encode the records in the fasta file. Defaults to "\%part", but may be a combination of all metadata columns including custom separators i.e. "\%sample|\%part|\%comment.
-#' @return Saves the content to disk, and returns the tibble before it is converted to a raw string.
+#' @param to_fasta A boolean designating whether the file should be written in the fasta format.
+#' @param record_format A string designating how to encode the records in the fasta file written. Defaults to "\%part", but may be a combination of all metadata columns including custom separators i.e. "\%sample|\%part|\%comment.
+#' @return Saves the content to disk, and returns a tibble which represents what is being written to disk.
 #' @examples
 #'
 #' #my_sequences = tabseq::read_tabseq(file = "extdata/test2.fa")
