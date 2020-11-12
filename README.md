@@ -88,7 +88,7 @@ This file will convert the tabseq to fasta, by the arguments given.
 
 
 
-# Installation (lunix)
+# Installation of cli-tools (lunix)
 
 Clone this repo, and expand your path to the `conversion/` directory.
 
@@ -97,7 +97,7 @@ cd ~
 git clone git@github.com:cmkobel/tabseq.git
 
 # Optionally, add the conversion scripts to your PATH-variable
-echo "PATH=\$PATH:~/tabseq/conversion" >> ~/.bashrc
+echo "PATH=\$PATH:~/tabseq/python" >> ~/.bashrc
 ```
 
 **Dependencies**:
