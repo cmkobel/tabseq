@@ -18,7 +18,7 @@ A tibble containing the respective records and sequences from the fasta-file. Re
 Takes the path to a fasta file. Loads the fasta file, and converts it to a tabseq table.
 }
 \examples{
-a = system.file("extdata", "test2.fa", package = "readr")
-a
-tabseq = read_tabseq(file = a)
+
+#my_sequences = read_tabseq("path/to/sequences.fa")
+
 }

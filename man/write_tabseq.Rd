@@ -23,6 +23,6 @@ Takes a tabseq table, and saves it to disk in the fasta format.
 }
 \examples{
 
-#my_sequences = tabseq::read_tabseq(file = "extdata/test2.fa")
-#tabseq::write_tabseq(my_sequences, "extdata/output.fasta")
+#my_sequences = read_tabseq("path/to/sequences.fa")
+#write_tabseq(my_sequences, "write/sequences/here/sequences.fa")
 }

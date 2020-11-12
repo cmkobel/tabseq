@@ -6,9 +6,9 @@
 #' @param from_fasta A boolean designating whether the file path points to a fasta-file
 #' @return A tibble containing the respective records and sequences from the fasta-file. Represented in the tabseq format.
 #' @examples
-#' a = system.file("extdata", "test2.fa", package = "readr")
-#' a
-#' tabseq = read_tabseq(file = a)
+#'
+#' #my_sequences = read_tabseq("path/to/sequences.fa")
+#'
 read_tabseq = function(file, from_fasta = T) {
 
 
@@ -54,8 +54,8 @@ read_tabseq = function(file, from_fasta = T) {
 #' @return Saves the content to disk, and returns a tibble which represents what is being written to disk.
 #' @examples
 #'
-#' #my_sequences = tabseq::read_tabseq(file = "extdata/test2.fa")
-#' #tabseq::write_tabseq(my_sequences, "extdata/output.fasta")
+#' #my_sequences = read_tabseq("path/to/sequences.fa")
+#' #write_tabseq(my_sequences, "write/sequences/here/sequences.fa")
 write_tabseq = function(x, file, record_format = "%part", to_fasta = T) {
 
     if (to_fasta) {
