@@ -97,6 +97,9 @@ if (!requireNamespace("devtools", quietly = TRUE))
 library(devtools)
 
 install_github("cmkobel/tabseq")
+
+# Then load the library in your script
+library(tabseq)
 ```
 
 
