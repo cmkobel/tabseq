@@ -51,24 +51,33 @@ read_tabseq = function(file, from_fasta = T) {
 #' @param file The path to a wanted fasta-file
 #' @param to_fasta A boolean designating whether the file should be written in the fasta format.
 #' @param record_format A string designating how to encode the records in the fasta file written. Defaults to "\%part", but may be a combination of all metadata columns including custom separators i.e. "\%sample|\%part|\%comment.
+#' @param verbose For debugging
 #' @return Saves the content to disk, and returns a tibble which represents what is being written to disk.
 #' @examples
 #'
 #' #my_sequences = read_tabseq("path/to/sequences.fa")
 #' #write_tabseq(my_sequences, "write/sequences/here/sequences.fa")
-write_tabseq = function(x, file, record_format = "%part", to_fasta = T) {
+write_tabseq = function(x, file, record_format = "%part", to_fasta = T, verbose = F) {
 
     if (to_fasta) {
 
-        print(paste("writing to file ", file, "as fasta"))
-        print(paste("using the following record_format:", record_format))
+        cat(paste("writing to file ", file, "as fasta", "\n"))
+        cat(paste("using the following record_format:", record_format, "\n"))
+
+
+        # The only reason I'm placing the record definition before making the 'formatted' variable, is because I want to be able to verbosely read the contents of it.
+        record = stringr::str_replace_all(record_format, "%sample", as.character(x$sample)) %>%
+            stringr::str_replace_all("%part", as.character(x$part)) %>%
+            stringr::str_replace_all("%comment", as.character(x$comment))
+
+        if (verbose) {
+            print(record)
+        }
 
         # format as "fasta"
         formatted = x %>%
             dplyr::mutate(record_format = record_format) %>%
-            dplyr::transmute(record = stringr::str_replace_all(record_format, "%sample", sample) %>%
-                          stringr::str_replace_all("%part", part) %>%
-                          stringr::str_replace_all("%comment", comment), sequence = sequence)
+            dplyr::transmute(record = record, sequence = sequence)
 
 
 
