@@ -93,10 +93,12 @@ Install and load devtools, then install directly from github
 ```{R}
 if (!requireNamespace("devtools", quietly = TRUE))
   install.packages("devtools")
-
 library(devtools)
 
 install_github("cmkobel/tabseq")
+
+# Then load the library in your script
+library(tabseq)
 ```
 
 
