@@ -1,10 +1,10 @@
 #!/usr/bin/env python3
 
 import sys
-
+import argparse
 
 __author__ = "Carl Mathias Kobel"
-__version__ = "0.1" # Not tested enough
+__version__ = "0.1.1" # Not tested enough
 
 
 def check_non_negative_int(value):
@@ -20,9 +20,9 @@ parser = argparse.ArgumentParser(prog = "fasta2tabseq.py", description='Convert 
 parser.add_argument('--version', action='version', version=f"tabseq2fasta.py v{__version__}")
 
 # Options to modify columns
-parser.add_argument('--fill_sample', nargs='?', help='overwrite the sample data with this value', default = "") 
+parser.add_argument('--fill_sample', nargs='?', help='overwrite the sample data with this value', default = "", metavar = "string", type = str) 
 #parser.add_argument('--fill_part', nargs='?', help='overwrite the part data with this value', default = False) # disabled, the record is saved in the part field.
-parser.add_argument('--fill_comment', nargs='?', help='overwrite the comment data with this value', default = "")
+parser.add_argument('--fill_comment', nargs='?', help='overwrite the comment data with this value', default = "", metavar = "string", type = str)
 
 # Options to remove data
 # group = parser.add_argument_group('optionally, omit data from being written to the fasta records')
