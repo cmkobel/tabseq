@@ -105,7 +105,8 @@ library(tabseq)
 # Installation of cli-tools (lunix)
 
 Clone this repo, and expand your path to the `python/` directory.
-Dependencies: python3
+
+Depends on python3.
 
 ```{sh}
 cd ~
