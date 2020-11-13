@@ -14,7 +14,7 @@ read_tabseq = function(file, from_fasta = T) {
 
     if (from_fasta) {
         # Open the file
-        print(paste("reading", file, "as fasta"))
+        cat(paste("reading", file, "as fasta", "\n"))
         file_open = scan(file, what = "character", sep = NULL, quiet = T)
 
 
@@ -60,8 +60,8 @@ write_tabseq = function(x, file, record_format = "%part", to_fasta = T) {
 
     if (to_fasta) {
 
-        print(paste("writing to file ", file, "as fasta"))
-        print(paste("using the following record_format:", record_format))
+        cat(paste("writing to file ", file, "as fasta"))
+        cat(paste("using the following record_format:", record_format))
 
         # format as "fasta"
         formatted = x %>%
