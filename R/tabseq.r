@@ -36,7 +36,7 @@ read_tabseq = function(file, from_fasta = T) {
 
             dplyr::transmute(sample = file, part, comment, sequence)
 
-        cat(paste("parsed", rv[1] %>% length, "records", "\n"))
+        cat(paste("parsed", (rv %>% dim)[1], "records", "\n"))
 
         rv
 
