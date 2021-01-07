@@ -58,7 +58,7 @@ eprint(f"""
 
 
 # Print the header
-print('sample', 'part', 'comment', 'sequence', sep = '\t')
+print('#sample', 'part', 'comment', 'sequence', sep = '\t')
 
 
 def write(fasta_header, dna):
@@ -84,7 +84,7 @@ for line in sys.stdin: #[i for i in sys.stdin] + [">"]:
         # Get ready for new DNA
         fasta_header = line[1:].strip() #.replace("\t", " ").replace(" ", "_")
         
-    elif line[0] == "\n":
+    elif line[0] == "\n" or line[0] == "#":
         continue
     else:
         

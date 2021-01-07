@@ -18,7 +18,7 @@ read_tabseq = function(file, from_fasta = T) {
         file_open = scan(file, what = "character", sep = NULL, quiet = T)
 
 
-        dplyr::tibble(raw = file_open) %>%
+        rv = dplyr::tibble(raw = file_open) %>%
 
             # detect record headers
             dplyr::mutate(header = if_else(stringr::str_sub(raw, 1, 1) == ">", T, F)) %>%
@@ -36,7 +36,9 @@ read_tabseq = function(file, from_fasta = T) {
 
             dplyr::transmute(sample = file, part, comment, sequence)
 
+        cat(paste("parsed", rv[1] %>% length, "records", "\n"))
 
+        rv
 
 
     }
