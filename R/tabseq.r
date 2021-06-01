@@ -108,7 +108,42 @@ write_fasta = function(x, file, format = "fasta", record_format = "%part", verbo
 
 }
 
-# TODO: Implement a reverse complement function
+# TODO: The complement function should really be called iupac_complement
+
+#' Complement nucleotide letters
+#' @export
+#' @description Takes a string of IUPAC nucleotide letters and complements them.
+#' @param string A string of DNA i.e. "ACGTTTN"
+#' @return A string which represents the chemical complements of the given input string
+#' @examples
+#'
+
+complement = function(string) {
+
+    # Spontaneous debugging
+    #string = "atgtcnNe"
+
+    # Define a mapping 1:1
+    # Only some of the IUPAC codes are included here. (common nucleotides)
+    # TODO: add the rest of the IUPAC codes.
+    mapping = c("a" = "t", "t" = "a", "c" = "g", "g" = "c", "n" = "n", # lower case nucleotides
+                "A" = "T", "T" = "A", "C" = "G", "G" = "C", "N" = "N", # upper case nucleotides
+                "-" = "-")                                             # Miscellaneous
+
+
+    splitted = unlist(strsplit(string, ""))
+    rv = mapping[splitted] #%>% paste(collapse = "")
+
+    NAs = sum(is.na(rv))
+    if (NAs > 0) {
+        warning(paste(NAs, "occurrences of unsupported charactors were complemented to a question mark:", paste(unique(splitted[is.na(rv)]), collapse = " ")))
+
+        rv[is.na(rv)] = "?"
+    }
+
+
+    paste(rv,collapse = "")
+}
 
 # TODO: Implenent read_gff with unlisting functions
 
