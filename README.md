@@ -94,8 +94,9 @@ This file will convert the tabseq to fasta, by the arguments given.
 Install and load devtools, then install directly from github
 
 ```{R}
-if (!requireNamespace("devtools", quietly = TRUE))
-  install.packages("devtools")
+if (!requireNamespace("devtools", quietly = TRUE)) {
+    install.packages("devtools")
+}
 
 devtools::install_github("cmkobel/tabseq")
 
