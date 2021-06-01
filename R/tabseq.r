@@ -108,6 +108,11 @@ write_fasta = function(x, file, format = "fasta", record_format = "%part", verbo
 
 }
 
+# TODO: Implement a reverse complement function
+
+# TODO: Implenent read_gff with unlisting functions
+
+# TODO: Consider implementing a View function that strips or simplifies the sequence column.
 
 
 
