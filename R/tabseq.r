@@ -114,21 +114,20 @@ write_fasta = function(x, file, format = "fasta", record_format = "%part", verbo
 #' @export
 #' @description Takes a string of IUPAC nucleotide letters and complements them.
 #' @param string A string of DNA i.e. "ACGTTTN"
+#' @param reverse Whether the string should be reversed or not (default TRUE)
+#' @param type String type. (default "nucleotide")
 #' @return A string which represents the chemical complements of the given input string
 #' @examples
 #'
 
-complement = function(string, type = "nucleotide") {
+reverse_complement = function(string, reverse = TRUE, type = "nucleotide") {
 
     if (type == "nucleotide") {
         # Spontaneous debugging
         #string = "atgtcnNe"
 
         # Define a mapping 1:1
-        # Only some of the IUPAC codes are included here. (common nucleotides)
-        # TODO: add the rest of the IUPAC codes.
         mapping = c(
-
             # lower case
             "a" = "t", "t" = "a", "u" = "a", "c" = "g", "g" = "c", # lower case nucleotides
             "y" = "r", "r" = "y", "s" = "s", "w" = "w", "k" = "m", "m" = "k", # Two letter codes
@@ -142,7 +141,8 @@ complement = function(string, type = "nucleotide") {
             "-" = "-", "N" = "N") # MISCELLANEOUS
 
 
-        splitted = unlist(strsplit(string, ""))
+        #splitted = unlist(strsplit(string, ""))
+        splitted = string |> strsplit("") |> unlist()
         rv = mapping[splitted] #%>% paste(collapse = "")
 
         NAs = sum(is.na(rv))
@@ -151,15 +151,23 @@ complement = function(string, type = "nucleotide") {
 
             rv[is.na(rv)] = "?"
         }
+    } else {
+        stop("Only type \"nucleotide\" is supported for now.")
     }
 
-    paste(rv,collapse = "")
+
+    if (reverse) {
+        rv = rev(rv)
+    }
+
+    paste(rv, collapse = "")
 }
 
-#"atugcyrswkmbdhvnatgatgatgatgATUGCYRSWKMBDHVNATGATGATGATG" |> complement() |> complement()
+#"atugcyrswkmbdhvnatgatgatgatgATUGCYRSWKMBDHVNATGATGATGATG" |> reverse_complement() |> reverse_complement()
 # attgcyrswkmbdhvnatgatgatgatgATTGCYRSWKMBDHVNATGATGATGATG
 
-# TODO: Implenent read_gff with unlisting functions
+
+# TODO: Implement read_gff with unlisting functions
 
 # TODO: Consider implementing a View function that strips or simplifies the sequence column.
 

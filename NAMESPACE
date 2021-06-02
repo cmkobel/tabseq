@@ -2,7 +2,7 @@
 
 export(read_fasta)
 export(write_fasta)
-export(complement)
+export(reverse_complement)
 import(dplyr)
 import(readr)
 import(stringr)
