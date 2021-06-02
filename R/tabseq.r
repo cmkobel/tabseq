@@ -118,32 +118,46 @@ write_fasta = function(x, file, format = "fasta", record_format = "%part", verbo
 #' @examples
 #'
 
-complement = function(string) {
+complement = function(string, type = "nucleotide") {
 
-    # Spontaneous debugging
-    #string = "atgtcnNe"
+    if (type == "nucleotide") {
+        # Spontaneous debugging
+        #string = "atgtcnNe"
 
-    # Define a mapping 1:1
-    # Only some of the IUPAC codes are included here. (common nucleotides)
-    # TODO: add the rest of the IUPAC codes.
-    mapping = c("a" = "t", "t" = "a", "c" = "g", "g" = "c", "n" = "n", # lower case nucleotides
-                "A" = "T", "T" = "A", "C" = "G", "G" = "C", "N" = "N", # upper case nucleotides
-                "-" = "-")                                             # Miscellaneous
+        # Define a mapping 1:1
+        # Only some of the IUPAC codes are included here. (common nucleotides)
+        # TODO: add the rest of the IUPAC codes.
+        mapping = c(
+
+            # lower case
+            "a" = "t", "t" = "a", "u" = "a", "c" = "g", "g" = "c", # lower case nucleotides
+            "y" = "r", "r" = "y", "s" = "s", "w" = "w", "k" = "m", "m" = "k", # Two letter codes
+            "b" = "v", "v" = "b", "d" = "h", "h" = "d", # Three letter codes
+            "-" = "-", "n" = "n", # Miscellaneous
+
+            # UPPER CASE
+            "A" = "T", "T" = "A", "U" = "A", "C" = "G", "G" = "C", # LOWER CASE NUCLEOTIDES
+            "Y" = "R", "R" = "Y", "S" = "S", "W" = "W", "K" = "M", "M" = "K", # TWO LETTER CODES
+            "B" = "V", "V" = "B", "D" = "H", "H" = "D", # THREE LETTER CODES
+            "-" = "-", "N" = "N") # MISCELLANEOUS
 
 
-    splitted = unlist(strsplit(string, ""))
-    rv = mapping[splitted] #%>% paste(collapse = "")
+        splitted = unlist(strsplit(string, ""))
+        rv = mapping[splitted] #%>% paste(collapse = "")
 
-    NAs = sum(is.na(rv))
-    if (NAs > 0) {
-        warning(paste(NAs, "occurrences of unsupported charactors were complemented to a question mark:", paste(unique(splitted[is.na(rv)]), collapse = " ")))
+        NAs = sum(is.na(rv))
+        if (NAs > 0) {
+            warning(paste(NAs, "occurrences of unsupported charactors were complemented to a question mark:", paste(unique(splitted[is.na(rv)]), collapse = " ")))
 
-        rv[is.na(rv)] = "?"
+            rv[is.na(rv)] = "?"
+        }
     }
-
 
     paste(rv,collapse = "")
 }
+
+#"atugcyrswkmbdhvnatgatgatgatgATUGCYRSWKMBDHVNATGATGATGATG" |> complement() |> complement()
+# attgcyrswkmbdhvnatgatgatgatgATTGCYRSWKMBDHVNATGATGATGATG
 
 # TODO: Implenent read_gff with unlisting functions
 
