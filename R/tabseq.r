@@ -175,35 +175,77 @@ reverse_complement = function(string, reverse = TRUE, type = "nucleotide") {
 #' @return A list of two items: annotation and fasta. The fasta item is read with tabseq::read_fasta()
 #' @examples
 read_gff = function(file, parse_attributes = TRUE) {
-    gff_file = "~/assemblycomparator2/tests/E._faecium_plasmids/output_asscom2/samples/VB3240/prokka/VB3240.gff"
+
     col_names = c("seqid", "source", "type", "start", "end", "score", "strand", "phase", "attributes") # Source: https://m.ensembl.org/info/website/upload/gff3.html
 
-    #gff = read_delim(gff_file, delim = "≠", comment = "##") |> View()
+    # For debugging
+    #file = "~/assemblycomparator2/tests/E._faecium_plasmids/output_asscom2/samples/VB3240/prokka/VB3240.gff"
 
     # Find the line number where the fasta file starts
-    file_open = scan(gff_file, what = "character", sep = "\n", quiet = T)
+    file_open = scan(file, what = "character", sep = "\n", quiet = T)
     annotation_fasta_split_line_number = str_detect(file_open, "^##FASTA") |> which()
     # If there is a fasta part in the gff file, read it with tabseq.
     if(annotation_fasta_split_line_number |> length() > 0) {
         write(paste("splitting the file between annotation and fasta at line number:", annotation_fasta_split_line_number), stderr())
 
-        fasta = tabseq::read_fasta(gff_file, skip = annotation_fasta_split_line_number - 1) # Be informed that when you use the skip argument, it counts exclusive of comment lines.
+        fasta = tabseq::read_fasta(file, skip = annotation_fasta_split_line_number - 1) # Be informed that when you use the skip argument, it counts exclusive of comment lines. Fortunately, no comment argument has been implemented in tabseq::read_fasta().
     } else {
         warning("The gff file doesn't contain a fasta part. The fasta item in the return value will be `NA`")
         fasta = NA
     }
 
-    annotation = read_tsv(file_open[1:(annotation_fasta_split_line_number - 1)], col_names = col_names, comment = "##", n_max = annotation_fasta_split_line_number) |>
-        #View()
+    annotation = read_tsv(file_open[1:(annotation_fasta_split_line_number - 1)], col_names = col_names, comment = "##") |>
+        # View()
         identity()
-
-
 
     list(annotation = annotation, fasta = fasta)
 }
 
 
+#' Calculate GC content
+#' @export
+#' @description Calculates GC, GC1 GC2 or GC3 for a given sequence.
+#' @param string A string of nucleotides
+#' @param position The position to look for GC at. 0 means all, 1 means GC1, 2 means GC2 and 3 means GC3.
+#' @return A list of two items: annotation and fasta. The fasta item is read with tabseq::read_fasta()
+#' @examples
+GC_content = function(string, position = 0) {
+
+    #string = "agcccatgtgaccagc"
+    #string = "AbbCdd"
+
+    string = string |> toupper()
+    splitted = string |>
+        strsplit("") |>
+        unlist()
+
+
+    if (position != 0 & position >= 1 & position <= 3) {
+        #write(paste0("Info: Calculating GC", position, "."), stderr())
+        splitted = splitted[(1:length(splitted)-1)%%3 == (position -1)]
+        #write(paste0(splitted, collapse = ""), stderr())
+    } else if (position == 0) {
+        #write(paste0("Info: Calculating GC in all positions."), stderr())
+    } else {
+        stop("Invalid position. Please choose 0 (all positions) or 1 through 3 for GC1 through GC3, respectively.")
+    }
+
+
+    Gs = (splitted == "G") |> sum()
+    Cs = (splitted == "C") |> sum()
+
+    GCs = Gs + Cs
+
+    GCs/length(splitted)
+
+}
+
+
+
 # TODO: Consider implementing a View function that strips or simplifies the sequence column.
+
+
+
 
 
 
