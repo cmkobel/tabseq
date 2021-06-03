@@ -3,6 +3,7 @@
 export(read_fasta)
 export(write_fasta)
 export(reverse_complement)
+export(read_gff)
 import(dplyr)
 import(readr)
 import(stringr)

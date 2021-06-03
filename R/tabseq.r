@@ -4,12 +4,13 @@
 #' @description Takes the path to a fasta file. Loads the fasta file, and converts it to a tabseq table.
 #' @param file The path to a fasta-file
 #' @param basename_only If TRUE, the full paths to the files will be truncated in favor of the basename only
+#' @param skip Skip this number of lines in the file before reading
 #' @return A tibble containing the respective records and sequences from the fasta-file. Represented in the tabseq format.
 #' @examples
 #'
 #' #my_sequences = read_tabseq("path/to/sequences.fa")
 #'
-read_fasta = function(file, basename_only = T) {
+read_fasta = function(file, basename_only = T, skip = 0) {
 
     # For spontaneous debugging:
     # file = "~/assemblycomparator2/tests/E._faecium_plasmids/VB3240.fna"
@@ -25,7 +26,7 @@ read_fasta = function(file, basename_only = T) {
     file_open = scan(file, what = "character", sep = "\n", quiet = T)
 
 
-    rv = dplyr::tibble(raw = file_open) %>%
+    rv = dplyr::tibble(raw = file_open[(skip+1):length(file_open)]) %>%
 
         # detect record headers
         dplyr::mutate(header = if_else(stringr::str_sub(raw, 1, 1) == ">", T, F)) %>%
@@ -118,8 +119,6 @@ write_fasta = function(x, file, format = "fasta", record_format = "%part", verbo
 #' @param type String type. (default "nucleotide")
 #' @return A string which represents the chemical complements of the given input string
 #' @examples
-#'
-
 reverse_complement = function(string, reverse = TRUE, type = "nucleotide") {
 
     if (type == "nucleotide") {
@@ -167,7 +166,42 @@ reverse_complement = function(string, reverse = TRUE, type = "nucleotide") {
 # attgcyrswkmbdhvnatgatgatgatgATTGCYRSWKMBDHVNATGATGATGATG
 
 
-# TODO: Implement read_gff with unlisting functions
+
+#' Read a GFF3 file
+#' @export
+#' @description Read a GFF3 file
+#' @param file A GFF3 file
+#' @param parse_attributes Whether the `attributes` column in the gff should be parsed into separate columns
+#' @return A list of two items: annotation and fasta. The fasta item is read with tabseq::read_fasta()
+#' @examples
+read_gff = function(file, parse_attributes = TRUE) {
+    gff_file = "~/assemblycomparator2/tests/E._faecium_plasmids/output_asscom2/samples/VB3240/prokka/VB3240.gff"
+    col_names = c("seqid", "source", "type", "start", "end", "score", "strand", "phase", "attributes") # Source: https://m.ensembl.org/info/website/upload/gff3.html
+
+    #gff = read_delim(gff_file, delim = "≠", comment = "##") |> View()
+
+    # Find the line number where the fasta file starts
+    file_open = scan(gff_file, what = "character", sep = "\n", quiet = T)
+    annotation_fasta_split_line_number = str_detect(file_open, "^##FASTA") |> which()
+    # If there is a fasta part in the gff file, read it with tabseq.
+    if(annotation_fasta_split_line_number |> length() > 0) {
+        write(paste("splitting the file between annotation and fasta at line number:", annotation_fasta_split_line_number), stderr())
+
+        fasta = tabseq::read_fasta(gff_file, skip = annotation_fasta_split_line_number - 1) # Be informed that when you use the skip argument, it counts exclusive of comment lines.
+    } else {
+        warning("The gff file doesn't contain a fasta part. The fasta item in the return value will be `NA`")
+        fasta = NA
+    }
+
+    annotation = read_tsv(file_open[1:(annotation_fasta_split_line_number - 1)], col_names = col_names, comment = "##", n_max = annotation_fasta_split_line_number) |>
+        #View()
+        identity()
+
+
+
+    list(annotation = annotation, fasta = fasta)
+}
+
 
 # TODO: Consider implementing a View function that strips or simplifies the sequence column.
 
