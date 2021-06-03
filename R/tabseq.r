@@ -206,7 +206,7 @@ read_gff = function(file, parse_attributes = TRUE) {
 #' @export
 #' @description Calculates GC, GC1 GC2 or GC3 for a given sequence.
 #' @param string A string of nucleotides
-#' @param position The position to look for GC at. 0 means all, 1 means GC1, 2 means GC2 and 3 means GC3.
+#' @param position The position to look for GC at. 0 (default) means all, 1 means GC1, 2 means GC2 and 3 means GC3.
 #' @return A list of two items: annotation and fasta. The fasta item is read with tabseq::read_fasta()
 #' @examples
 GC_content = function(string, position = 0) {
