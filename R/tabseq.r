@@ -1,6 +1,6 @@
 #' Read a fasta file and convert it to tabseq
 #' @export
-#' @import dplyr stringr tidyr readr
+#' @import dplyr stringr tidyr readr magrittr
 #' @description Takes the path to a fasta file. Loads the fasta file, and converts it to a tabseq table.
 #' @param file The path to a fasta-file
 #' @param basename_only If TRUE, the full paths to the files will be truncated in favor of the basename only
@@ -22,14 +22,16 @@ read_fasta = function(file, basename_only = T, skip = 0) {
     }
 
     # Open the file
-    cat(paste("reading", file, "as fasta", "\n"))
+    #cat(paste("reading", file, "as fasta", "\n"))
+    message(paste("reading", file, "as fasta", "\n"))
+
     file_open = scan(file, what = "character", sep = "\n", quiet = T)
 
 
     rv = dplyr::tibble(raw = file_open[(skip+1):length(file_open)]) %>%
 
         # detect record headers
-        dplyr::mutate(header = if_else(stringr::str_sub(raw, 1, 1) == ">", T, F)) %>%
+        dplyr::mutate(header = dplyr::if_else(stringr::str_sub(raw, 1, 1) == ">", T, F)) %>%
 
         # enumerate the record headers and fill the downwards through the sequence lines
         dplyr::mutate(header_num = ifelse(header, seq.int(nrow(.)), NA)) %>% # needs no sorting
@@ -44,7 +46,9 @@ read_fasta = function(file, basename_only = T, skip = 0) {
 
         dplyr::transmute(sample = file_presentable, part, comment, sequence)
 
-    cat(paste("parsed", (rv %>% dim)[1], "records", "\n"))
+    #cat(paste("parsed", (rv %>% dim)[1], "records", "\n"))
+    message(paste("parsed", (rv %>% dim)[1], "records", "\n"))
+
 
     rv
 
@@ -202,19 +206,15 @@ read_gff = function(file, parse_attributes = TRUE) {
 }
 
 
-#' Calculate GC content
-#' @export
-#' @description Calculates GC, GC1 GC2 or GC3 for a given sequence.
-#' @param string A string of nucleotides
-#' @param position The position to look for GC at. 0 (default) means all, 1 means GC1, 2 means GC2 and 3 means GC3.
-#' @return A list of two items: annotation and fasta. The fasta item is read with tabseq::read_fasta()
-#' @examples
-GC_content = function(string, position = 0) {
 
+GC_content_nonvectorized = function(string, position = 0) {
     #string = "agcccatgtgaccagc"
     #string = "AbbCdd"
 
+    # Uppercase as a means of homogenization
     string = string |> toupper()
+
+    # Each item in `splitted` is now a single character
     splitted = string |>
         strsplit("") |>
         unlist()
@@ -223,7 +223,6 @@ GC_content = function(string, position = 0) {
     if (position != 0 & position >= 1 & position <= 3) {
         #write(paste0("Info: Calculating GC", position, "."), stderr())
         splitted = splitted[(1:length(splitted)-1)%%3 == (position -1)]
-        #write(paste0(splitted, collapse = ""), stderr())
     } else if (position == 0) {
         #write(paste0("Info: Calculating GC in all positions."), stderr())
     } else {
@@ -238,6 +237,25 @@ GC_content = function(string, position = 0) {
 
     GCs/length(splitted)
 
+}
+
+
+
+
+
+#' Calculate GC content
+#' @export
+#' @import magrittr
+#' @description Calculates GC, GC1 GC2 or GC3 for a given sequence.
+#' @param string A string of nucleotides
+#' @param position The position to look for GC at. 0 (default) means all, 1 means GC1, 2 means GC2 and 3 means GC3.
+#' @return A list of two items: annotation and fasta. The fasta item is read with tabseq::read_fasta()
+#' @examples
+GC_content = function(string, position = 0) {
+    message("calling vectorized edition")
+    rv = Vectorize(GC_content_nonvectorized, vectorize.args = "string")(string, position)
+    names(rv) = NULL
+    rv
 }
 
 
