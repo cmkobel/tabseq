@@ -253,6 +253,8 @@ GC_content_nonvectorized = function(string, position = 0) {
 #' @examples
 GC_content = function(string, position = 0) {
     message("calling vectorized edition")
+
+    # Simply call the non vectorized function above, and pass the arguments.
     rv = Vectorize(GC_content_nonvectorized, vectorize.args = "string")(string, position)
     names(rv) = NULL
     rv
@@ -263,6 +265,22 @@ GC_content = function(string, position = 0) {
 # TODO: Consider implementing a View function that strips or simplifies the sequence column.
 
 
+
+
+#' Invoke View without the sequence column
+#' @export
+#' @import magrittr, stringr
+#' @description Calculates GC, GC1 GC2 or GC3 for a given sequence.
+#' @param string A string of nucleotides
+#' @param position The position to look for GC at. 0 (default) means all, 1 means GC1, 2 means GC2 and 3 means GC3.
+#' @return A list of two items: annotation and fasta. The fasta item is read with tabseq::read_fasta()
+#' @examples
+tsView = function(input) {
+    message("version x23")
+    input %>%
+        mutate(sequence = paste(str_sub(sequence, 1, 10), "(..)")) %>%
+        View()
+}
 
 
 
