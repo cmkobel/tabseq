@@ -20,10 +20,10 @@ As the name suggests, this file format is an heir of the tab-separated-value for
 
 Four features are required: `sample`, `part`, `comment`, `sequence`. They're all strings. _.tabseq_ files are utf-8 encoded, so you can really put any symbol you'd like. If a feature is not necessary for your project, you can simply fill it with the string: `NA`.
 
- - `sample`: What is the name of your sample? Here you can specify a unique sample name for your project, the public sample name or just the general species.
- - `part`: It might come handy to be able to subset your sequences in any way. The most typical use for part is to specify the name of the gene the sequence represents. Another typical use is to specify the name of the contig represented.
- - `comment`: Just an auxillary column to put metadata or anything really. If you want to encode more than a single variable worth of information, use the semicolon-separated list of tag=value pairs, as in the GFF format; for example `GC=0.23;strand=+` etc.
- - `sequence`: This is simply the sequence that the whole format is all about. No additives. Just a long line of ATGC' (or any IUPAC DNA/AA code) with no line breaks or fancy symbols.
+ 1. `sample`: What is the name of your sample? Here you can specify a unique sample name for your project, the public sample name or just the general species.
+ 2. `part`: It might come handy to be able to subset your sequences in any way. The most typical use for part is to specify the name of the gene the sequence represents. Another typical use is to specify the name of the contig represented.
+ 3. `comment`: Just an auxillary column to put metadata or anything really. If you want to encode more than a single variable worth of information, use the semicolon-separated list of tag=value pairs, as in the GFF format; for example `GC=0.23;strand=+` etc.
+ 4. `sequence`: This is simply the sequence that the whole format is all about. No additives. Just a long line of ATGC' (or any IUPAC DNA/AA code) with no line breaks or fancy symbols.
 
 That is it.
 
