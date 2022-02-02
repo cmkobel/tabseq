@@ -33,7 +33,7 @@ As as omen to command-line tools, the header should begin with a hash `#`, to ma
 
 These examples don't show any complex behaviour, but merely aims to give the reader an intuitive understanding of what the _.tabseq_ format looks like.
 
-_Note:_ in the following examples, the use of tabs is emphasized using tab-symbols_ `⇥`. And the sequences are truncated after 17 bases to make things visible on normal sized screens._
+_Note:_ in the following examples, the use of tabs is emphasized using tab-symbols_ ` ⇥ `. And the sequences are truncated after 17 bases to make things visible on normal sized screens._
 
 **Example 1**: alignment of one gene from several samples. Here shown with GC and reference ANI information in the comment column.
 ```
