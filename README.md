@@ -1,5 +1,5 @@
 
-# .tabseq
+# \<your file name\>`.tabseq`
 
 
 You probably love fasta. But tell me - can you quickly concatenate all the genes from a fasta alignment of several samples? Can you quickly create a synthetic genome (i.e. core or pan genome) from a list of fasta files containing the harbored genes? If not, then take a look at the _.tabseq_-format.
