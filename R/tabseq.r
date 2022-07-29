@@ -1,6 +1,6 @@
 #' Read a fasta file and convert it to tabseq
 #' @export
-#' @import dplyr stringr tidyr readr magrittr
+#' @import dplyr stringr tidyr readr
 #' @description Takes the path to a fasta file. Loads the fasta file, and converts it to a tabseq table.
 #' @param file The path to a fasta-file
 #' @param basename_only If TRUE, the full paths to the files will be truncated in favor of the basename only
@@ -245,7 +245,7 @@ GC_content_nonvectorized = function(string, position = 0) {
 
 #' Calculate GC content
 #' @export
-#' @import magrittr
+#' @import stringr
 #' @description Calculates GC, GC1 GC2 or GC3 for a given sequence.
 #' @param string A string of nucleotides
 #' @param position The position to look for GC at. 0 (default) means all, 1 means GC1, 2 means GC2 and 3 means GC3.
@@ -267,19 +267,32 @@ GC_content = function(string, position = 0) {
 
 
 
+#' Simplify the sequence column for development purposes
+#' @export
+#' @import stringr
+#' @description Truncates the sequence column
+#' @param input A string of nucleotides
+#' @return A list of two items: annotation and fasta. The fasta item is read with tabseq::read_fasta()
+#' @examples
+ts_neutralize = function(input) {
+    message("version x24")
+    input %>%
+        mutate(sequence = paste(str_sub(sequence, 1, 10), "(..)"))
+}
+
+
 #' Invoke View without the sequence column
 #' @export
-#' @import magrittr, stringr
+#' @import stringr
 #' @description Calculates GC, GC1 GC2 or GC3 for a given sequence.
-#' @param string A string of nucleotides
-#' @param position The position to look for GC at. 0 (default) means all, 1 means GC1, 2 means GC2 and 3 means GC3.
+#' @param input A tabseq table
 #' @return A list of two items: annotation and fasta. The fasta item is read with tabseq::read_fasta()
 #' @examples
 tsView = function(input) {
-    message("version x23")
+    message("version x24")
     input %>%
         mutate(sequence = paste(str_sub(sequence, 1, 10), "(..)")) %>%
-        View()
+        View(title = paste("tabseq View"))
 }
 
 

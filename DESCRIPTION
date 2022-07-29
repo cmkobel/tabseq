@@ -1,14 +1,12 @@
 Package: tabseq
-Type: Package
-Title: fasta-tidyverse interface
+Title: Fasta-Tidyverse Interface
 Version: 0.1.1
-Author: Carl Mathias Kobel
-Maintainer: Carl Mathias Kobel <kobel@pm.me>
-Description: tabseq provides a programmable interface
-    between the fasta format and the tidyverse tools
-License: GPL2
+Authors@R: 
+    person("Carl Mathias", "Kobel", , "kobel@proton.me", role = c("aut", "cre"),
+           comment = c(ORCID = "0000-0002-4461-1159"))
+Description: Tools for handling biological sequences in a tabular format, suited to be interoperable with tidyverse.
+License: `use_mit_license()`
 Encoding: UTF-8
-LazyData: true
-Imports: dplyr, stringr, tidyr, readr, magrittr
-Suggests: tidyverse
-RoxygenNote: 7.1.2
+Roxygen: list(markdown = TRUE)
+RoxygenNote: 7.2.1
+Imports: dplyr, readr, stringr, tidyr
