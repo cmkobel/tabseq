@@ -1,6 +1,6 @@
 Package: tabseq
 Title: Fasta-Tidyverse Interface
-Version: 0.1.1
+Version: 0.1.2
 Authors@R: 
     person("Carl Mathias", "Kobel", , "kobel@proton.me", role = c("aut", "cre"),
            comment = c(ORCID = "0000-0002-4461-1159"))

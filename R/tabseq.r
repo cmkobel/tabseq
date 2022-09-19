@@ -206,7 +206,7 @@ read_gff = function(file, parse_attributes = TRUE) {
 }
 
 
-
+# This function is not exported
 GC_content_nonvectorized = function(string, position = 0) {
     #string = "agcccatgtgaccagc"
     #string = "AbbCdd"
@@ -295,6 +295,56 @@ tsView = function(input) {
         View(title = paste("tabseq View"))
 }
 
+
+#' Convenience function for reading tabseqs
+#' @export
+#' @import readr
+#' @description Imports a tabseq with the correct column types
+#' @param input A tabseq path/filename
+#' @return A tibble containing the input tabseq content.
+#' @examples
+read_tabseq = function(input) {
+    readr::read_tsv(file = input,
+             col_names = c("sample", "part", "comment", "sequence"),
+             col_types = cols(.default = col_character()),
+             comment = "#")
+
+    # Todo: check for duplicate pairs in sample/part
+}
+
+
+
+#' Extracts key=value; pair information in the comment column
+#' @export
+#' @import readr, magrittr
+#' @description This function expands tabseq comment key-value pair contents into several columns
+#' @param tabseq A tabseq tibble
+#' @return A tabseq tibble
+#' @examples
+extract_attributes = function(tabseq, output_wide = TRUE, include_sequence = TRUE, ...) {
+    rv = tabseq |>
+        select(sample, part, comment) |> # Way too heavy to drag the sequence along here. Join it later..
+        mutate(comment = str_split(comment, ";"))  |>
+        unnest(cols = comment) |>
+        separate(col = comment, into = c("name", "value"), sep = "=") %>%
+        filter(!is.na(value))  # removes empty rows if attributes are ending with a semi-colon (;)
+
+
+    # Perform pivot wider step
+    if (output_wide) {
+        rv = pivot_wider(rv, id_cols = c(sample, part), names_prefix = "ts_", ...)
+    }
+
+
+    # Add the sequence back on
+    if (include_sequence) {
+        rv = left_join(x = rv,
+                       y = ts |> select(sample, part, sequence),
+                       by = c("sample", "part"))
+    }
+
+    rv
+}
 
 
 
