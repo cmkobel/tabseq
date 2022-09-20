@@ -16,7 +16,16 @@ The concept is very simple, and hopefully you will find it to be powerful as wel
 
 ## So, what does it look like?
 
-the `&mdash;`
+Imagine a file containing the 16S gene from two different species.
+The corresponding .tabseq file might look something like this: 
+```
+sample--------------⇥part--⇥comment--------------------⇥sequence
+E. coli K12---------⇥16S---⇥strand=+;source=CP329873---⇥ATGAAGAATAAGTTAGGACAGCACTTTTTAAATGACATT...
+S. acidocaldarius---⇥16S---⇥strand=+;source=CP329873---⇥ATGGAGAAAAAGTTATTACAGCACATTTAAAATGAAATT...
+```
+The ---⇥ symbol is used to illustrate a tab in the file, which would otherwise be invisible.
+
+ 
 
 
 You probably love fasta. But tell me - can you quickly concatenate all the genes from a fasta alignment of several samples? Can you quickly create a synthetic genome (i.e. core or pan genome) from a list of fasta files containing the harbored genes? If not, then take a look at the _.tabseq_-format.
