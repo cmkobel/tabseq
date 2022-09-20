@@ -10,7 +10,7 @@ Many great data tools work well with tab-separated files. The fasta format thoug
 ## R and tidyverse
 Working with sequences in a tabular format comes with some series pros. As this is mainly an R-package intended to be imported together with tidyverse, working with sequences in the tabseq opens up to use the column operations and string operations that tidyverse is optimized to work on.
 
-For instance you can use `stringr::sub_str()` to extract parts of a sequence. You can use dplyr::filter and left_join to filter and join individual genes from different samples or species: For instance, you could use dplyr::inner_join to get the core genes from a set of species. This, you could of course also do with a GFF file, but here you have the option to take the sequences along, and make concatenations, reverse_complements, GC_measurements right off the bat.  
+For instance you can use stringr::sub_str() to extract parts of a sequence. You can use dplyr::filter and left_join to filter and join individual genes from different samples or species: For instance, you could use dplyr::inner_join to get the core genes from a set of species. This, you could of course also do with a GFF file, but here you have the option to take the sequences along, and make concatenations, reverse_complements, GC_measurements right off the bat.  
 
 The concept is very simple, and hopefully you will find it to be powerful as well.
 
