@@ -1,6 +1,19 @@
 
 # \<your file name\>`.tabseq`
 
+## Brief
+Tabseq is simply a sequence file format based on a tabular file format, like a .tsv-file.
+
+## Background
+Many great data tools work well with tab-separated files. The fasta format though requires specialized tools. Tasks as simple as measuring the length of records (could be contigs or genes) in a fasta file requires specialized tools like awk, bioawk, biopython etc. Data scientists will be proficient in arranging content in tabulated file formats, so why don't we apply these skills on our sequence files instead of learning all these extra tools just to work with sequence data? - Sequences are -after all- just data like anything else that we tend to put into a tabular format.
+
+## R and tidyverse
+Working with sequences in a tabular format comes with some series pros. As this package is intended 
+
+The concent is very simple, and hopefully you will find it powerful as well.
+
+## So, what does it look like?
+
 
 You probably love fasta. But tell me - can you quickly concatenate all the genes from a fasta alignment of several samples? Can you quickly create a synthetic genome (i.e. core or pan genome) from a list of fasta files containing the harbored genes? If not, then take a look at the _.tabseq_-format.
 
