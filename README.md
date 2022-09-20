@@ -10,7 +10,7 @@ Many great data tools work well with tab-separated files. The fasta format thoug
 ## R and tidyverse
 Working with sequences in a tabular format comes with some series pros. As this package is intended 
 
-The concent is very simple, and hopefully you will find it powerful as well.
+The concent is very simple, and hopefully you will find it to be powerful as well.
 
 ## So, what does it look like?
 
