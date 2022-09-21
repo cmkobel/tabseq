@@ -4,7 +4,7 @@
 \alias{read_fasta}
 \title{Read a fasta file and convert it to tabseq}
 \usage{
-read_fasta(file, basename_only = T, skip = 0)
+read_fasta(file, basename_only = T, remove_extension = F, skip = 0, nmax = 0)
 }
 \arguments{
 \item{file}{The path to a fasta-file}

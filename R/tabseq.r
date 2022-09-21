@@ -10,7 +10,7 @@
 #'
 #' #my_sequences = read_tabseq("path/to/sequences.fa")
 #'
-read_fasta = function(file, basename_only = T, skip = 0) {
+read_fasta = function(file, basename_only = T, remove_extension = F, skip = 0, nmax = 0) {
 
     # For spontaneous debugging:
     # file = "~/assemblycomparator2/tests/E._faecium_plasmids/VB3240.fna"
@@ -21,14 +21,19 @@ read_fasta = function(file, basename_only = T, skip = 0) {
         file_presentable = file
     }
 
+    if (remove_extension) {
+        file_presentable_splitted = strsplit(file_presentable, "\\.") |> unlist()
+        file_presentable = paste(file_presentable_splitted[1:(length(file_presentable_splitted))-1], collapse = ".")
+        # Really disappointed in my self, that I couldn't get this below two lines.
+    }
+
     # Open the file
-    #cat(paste("reading", file, "as fasta", "\n"))
     message(paste("reading", file, "as fasta", "\n"))
 
-    file_open = scan(file, what = "character", sep = "\n", quiet = T)
+    file_open = scan(file, what = "character", sep = "\n", quiet = T, nmax = nmax+1) # Not sure about that nmax + 1 thing.
 
 
-    rv = dplyr::tibble(raw = file_open[(skip+1):length(file_open)]) %>%
+    rv = dplyr::tibble(raw = file_open[(skip+1):length(file_open)]) %>% # +1 on the skip because skip=1 would actually mean skip none. Why am I not using skip built into scan instead?
 
         # detect record headers
         dplyr::mutate(header = dplyr::if_else(stringr::str_sub(raw, 1, 1) == ">", T, F)) %>%
@@ -143,7 +148,6 @@ reverse_complement = function(string, reverse = TRUE, type = "nucleotide") {
             "B" = "V", "V" = "B", "D" = "H", "H" = "D", # THREE LETTER CODES
             "-" = "-", "N" = "N") # MISCELLANEOUS
 
-
         #splitted = unlist(strsplit(string, ""))
         splitted = string |> strsplit("") |> unlist()
         rv = mapping[splitted] #%>% paste(collapse = "")
@@ -240,9 +244,6 @@ GC_content_nonvectorized = function(string, position = 0) {
 }
 
 
-
-
-
 #' Calculate GC content
 #' @export
 #' @import stringr
@@ -316,35 +317,46 @@ read_tabseq = function(input) {
 
 #' Extracts key=value; pair information in the comment column
 #' @export
-#' @import readr, magrittr
+#' @import magrittr
+#' @import readr
 #' @description This function expands tabseq comment key-value pair contents into several columns
 #' @param tabseq A tabseq tibble
 #' @return A tabseq tibble
 #' @examples
-extract_attributes = function(tabseq, output_wide = TRUE, include_sequence = TRUE, ...) {
+expand_attributes = function(tabseq, output_wide = TRUE, include_sequence = TRUE, ...) {
+    # The user might want to save cpu time by not performing the pivet_wider
+    # step. Same step goes for left_joining. That is the reason why the two
+    # arguments output_wide and include_sequence exist.
     rv = tabseq |>
-        select(sample, part, comment) |> # Way too heavy to drag the sequence along here. Join it later..
-        mutate(comment = str_split(comment, ";"))  |>
-        unnest(cols = comment) |>
-        separate(col = comment, into = c("name", "value"), sep = "=") %>%
-        filter(!is.na(value))  # removes empty rows if attributes are ending with a semi-colon (;)
+        dplyr::select(sample, part, comment) |>
+
+        # Way too heavy to drag the sequence along here.
+        # Remember that each marginal key=value; pair becomes a row.
+        # Therefore we will join it later.
+        dplyr::mutate(comment = str_split(comment, ";"))  |>
+
+        tidyr::unnest(cols = comment) |>
+        tidyr::separate(col = comment, into = c("name", "value"), sep = "=") %>%
+        dplyr::filter(!is.na(value))  # removes empty rows if attributes are ending with a semi-colon (;)
 
 
-    # Perform pivot wider step
+    # Pivot wider step
     if (output_wide) {
         rv = pivot_wider(rv, id_cols = c(sample, part), names_prefix = "ts_", ...)
     }
 
-
     # Add the sequence back on
     if (include_sequence) {
         rv = left_join(x = rv,
-                       y = ts |> select(sample, part, sequence),
+                       y = tabseq |> select(sample, part, sequence),
                        by = c("sample", "part"))
     }
 
     rv
 }
+
+
+
 
 
 
