@@ -1,6 +1,7 @@
 
 # \<your file name\>`.tabseq`
 
+[![R-CMD-CHEK](https://github.com/cmkobel/tabseq/workflows/R-CMD-CHECK/badge.svg)](https://github.com/cmkobel/tabseq/actions)
 ## Brief
 Tabseq is simply a sequence file standard based on a the tabular file format - like a .tsv-file.
 
