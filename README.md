@@ -68,7 +68,7 @@ Clone this repo, and expand your path to the `python/` directory.
 
 Depends on python3.
 
-```sh
+```bash
 cd ~
 git clone git@github.com:cmkobel/tabseq.git
 
