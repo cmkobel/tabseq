@@ -36,7 +36,7 @@ TODO: Consider renaming column _comment_ to _metadata_.
 
  1. `sample`: What is the name of your sample? Here you can specify a unique sample name for your project, the public sample name or just the general species.
  2. `part`: It might come handy to be able to subset your sequences in any way. The most typical use for part is to specify the name of the gene the sequence represents. Another typical use is to specify the name of the contig represented.
- 3. `metada`: This is an auxillary column to put metadata or anything really. If you want to encode more than a single variable worth of information, use the semicolon-separated list of name=value pairs, as in the GFF format; for example `GC=0.23;strand=+` etc. The R-package comes with tools to expand and condense these `name=value;` pairs.
+ 3. `metadata`: This is an auxillary column to put metadata or anything really. If you want to encode more than a single variable worth of information, use the semicolon-separated list of name=value pairs, as in the GFF format; for example `GC=0.23;strand=+` etc. The R-package comes with tools to expand and condense these `name=value;` pairs.
  4. `sequence`: This is the sequence that the whole format is all about. Just a long line of ATGCs (or any IUPAC DNA/AA code) with no line breaks or fancy symbols.
 
  
