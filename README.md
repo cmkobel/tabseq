@@ -23,7 +23,7 @@ The corresponding .tabseq file might look something like this:
 E. coli K12          16S    strand=+;source=CP329873    AAAGAATAAGTTAGGACAGCACTTTTTAAATGACATT...
 S. acidocaldarius    16S    strand=+;source=CP398723    AGAGAAAAAGTTATTACAGCACATTTAAAATGAAATT...
 ```
-(The ---⇥ symbol is used to illustrate a tab in the file, which would otherwise be invisible.)
+(The white space is supposed to resemble tap stops)
 
 The first line starting with a #-symbol is simply the header, defining the four columns that make up the structure of the .tabseq-format. Any line starting with a #-symbol is interpreted as a comment. Consequently, the header is unecessary, but may be included to make human-reading more straightforward. 
 
