@@ -19,7 +19,7 @@ The concept is simple, and hopefully you will find it to be powerful as well. Be
 Imagine a file containing the 16S gene from two different species.
 The corresponding .tabseq file might look something like this: 
 ```
-#sample--------------⇥part--⇥comment--------------------⇥sequence
+#sample-------------⇥part--⇥comment--------------------⇥sequence
 E. coli K12---------⇥16S---⇥strand=+;source=CP329873---⇥ATGAAGAATAAGTTAGGACAGCACTTTTTAAATGACATT...
 S. acidocaldarius---⇥16S---⇥strand=+;source=CP329873---⇥ATGGAGAAAAAGTTATTACAGCACATTTAAAATGAAATT...
 ```
