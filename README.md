@@ -50,7 +50,7 @@ In order to help converting between formats, I created a series of conversion sc
 Install and load devtools, then install directly from github
 Minimum R version required is 3.6.3
 
-```{R}
+```R
 if (!requireNamespace("devtools", quietly = TRUE)) {
     install.packages("devtools")
 }
@@ -68,7 +68,7 @@ Clone this repo, and expand your path to the `python/` directory.
 
 Depends on python3.
 
-```{sh}
+```sh
 cd ~
 git clone git@github.com:cmkobel/tabseq.git
 
