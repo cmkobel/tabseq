@@ -27,7 +27,7 @@ S. acidocaldarius---⇥16S---⇥strand=+;source=CP329873---⇥ATGGAGAAAAAGTTATTA
 
 The first line starting with a #-symbol is simply the header, defining the four columns that make up the structure of the .tabseq-format. Any line starting with a #-symbol is interpreted as a comment. Consequently, the header is unecessary, but may be included to make human-reading more straightforward. 
 
-The four columns are required: `sample`, `part`, `comment`, `sequence`. They're all strings. `.tabseq` files are utf-8 encoded, so you can really put any symbol you'd like. If a feature is not necessary for your project, you can can either fill it with the R NA-value, or leave it empty (surrounded by two tab symbols).
+The four columns are required: `sample`, `part`, `comment`, `sequence`. They're all strings. tabseq files are utf-8 encoded, so you can really put any symbol you'd like. If a feature is not necessary for your project, you can can either fill it with the R NA-value, or leave it empty (surrounded by two tab symbols).
 
 ### Column definitions
 
