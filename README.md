@@ -29,7 +29,7 @@ The first line starting with a #-symbol is simply the header, defining the four 
 
 The four columns are required: `sample`, `part`, `comment`, `sequence`. They're all strings. tabseq files are utf-8 encoded, so you can really put any symbol you'd like. If a feature is not necessary for your project, you can can either fill it with the R NA-value, or leave it empty (surrounded by two tab symbols).
 
-TODO: Consider renaming comment to metadata
+TODO: Consider renaming column _comment_ to _metadata_.
 
 ### Column definitions
 
