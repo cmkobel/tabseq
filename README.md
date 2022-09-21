@@ -1,6 +1,47 @@
 
 # \<your file name\>`.tabseq`
 
+## Brief
+Tabseq is simply a sequence file standard based on a the tabular file format - like a .tsv-file.
+
+## Background
+Many great data tools work well with tab-separated files. The fasta format though requires specialized tools. Tasks as simple as measuring the length of records (could be contigs or genes) in a fasta file requires specialized tools like awk, bioawk, biopython etc. Data scientists will be proficient in arranging content in tabulated file formats, so why don't we apply these skills on our sequence files instead of learning all these extra tools just to work with sequence data? - Sequences are -after all- just data like anything else that we tend to put into a tabular format.
+
+## R and tidyverse
+Working with sequences in a tabular format comes with pros. As this is mainly an R-package intended to be imported together with tidyverse, working with sequences in the tabseq format opens up the possibility of using column operations and string operations that tidyverse does so well.
+
+For instance you can use stringr::sub_str() to extract parts of a sequence, think genes inside a chromosome. You can use dplyr::filter and left_join to filter and join individual genes from different samples or species based on database lookups: For instance, you could use dplyr::inner_join to get the core genes from a set of species. This, you could of course also do with a GFF file, but here you have the option to take the sequences along, and make concatenations, reverse_complements, GC_measurements right off the bat.  
+
+The concept is simple, and hopefully you will find it to be powerful as well. Below, we will walk through a few examples together, to make it clear how this works in practice.
+
+## So, what does it look like?
+
+Imagine a file containing the 16S gene from two different species.
+The corresponding .tabseq file might look something like this: 
+```
+#sample              part   metadata                   sequence
+E. coli K12          16S    strand=+;ref_ANI=0.980;    AAAGAATAAGTTAGGACAGCACTTTTTAAATGACATT...
+S. acidocaldarius    16S    strand=+;ref_ANI=0.973;    AGAGAAAAAGTTATTACAGCACATTTAAAATGAAATT...
+```
+(The white space is supposed to resemble tap stops)
+
+The first line starting with a #-symbol is simply the header, defining the four columns that make up the structure of the .tabseq-format. Any line starting with a #-symbol is interpreted as a comment. Consequently, the header is unecessary, but may be included to make human-reading more straightforward. 
+
+The four columns are required: `sample`, `part`, `metadata`, `sequence`. They're all strings. tabseq files are utf-8 encoded, so you can really put any symbol you'd like. If a feature is not necessary for your project, you can can either fill it with the R NA-value, or leave it empty (surrounded by two tab symbols).
+
+TODO: Consider renaming column _comment_ to _metadata_.
+
+### Column definitions
+
+ 1. `sample`: What is the name of your sample? Here you can specify a unique sample name for your project, the public sample name or just the general species.
+ 2. `part`: It might come handy to be able to subset your sequences in any way. The most typical use for part is to specify the name of the gene the sequence represents. Another typical use is to specify the name of the contig represented.
+ 3. `metada`: This is an auxillary column to put metadata or anything really. If you want to encode more than a single variable worth of information, use the semicolon-separated list of name=value pairs, as in the GFF format; for example `GC=0.23;strand=+` etc. The R-package comes with tools to expand and condense these `name=value;` pairs.
+ 4. `sequence`: This is the sequence that the whole format is all about. Just a long line of ATGCs (or any IUPAC DNA/AA code) with no line breaks or fancy symbols.
+
+ 
+---
+
+Old text:
 
 You probably love fasta. But tell me - can you quickly concatenate all the genes from a fasta alignment of several samples? Can you quickly create a synthetic genome (i.e. core or pan genome) from a list of fasta files containing the harbored genes? If not, then take a look at the _.tabseq_-format.
 
@@ -18,11 +59,11 @@ This repository contains the documentation of the .tabseq-format as well as a se
 ## Formatting
 As the name suggests, this file format is an heir of the tab-separated-value format. Each line contains one sequence trailed by a number of features.
 
-Four features are required: `sample`, `part`, `comment`, `sequence`. They're all strings. _.tabseq_ files are utf-8 encoded, so you can really put any symbol you'd like. If a feature is not necessary for your project, you can simply fill it with the string: `NA`.
+Four features are required: `sample`, `part`, `metadata`, `sequence`. They're all strings. _.tabseq_ files are utf-8 encoded, so you can really put any symbol you'd like. If a feature is not necessary for your project, you can simply fill it with the string: `NA`.
 
  1. `sample`: What is the name of your sample? Here you can specify a unique sample name for your project, the public sample name or just the general species.
  2. `part`: It might come handy to be able to subset your sequences in any way. The most typical use for part is to specify the name of the gene the sequence represents. Another typical use is to specify the name of the contig represented.
- 3. `comment`: Just an auxillary column to put metadata or anything really. If you want to encode more than a single variable worth of information, use the semicolon-separated list of tag=value pairs, as in the GFF format; for example `GC=0.23;strand=+` etc.
+ 3. `metadata`: Just an auxillary column to put metadata, a comment or anything really. If you want to encode more than a single variable worth of information, use the semicolon-separated list of tag=value pairs, as in the GFF format; for example `GC=0.23;strand=+` etc.
  4. `sequence`: This is simply the sequence that the whole format is all about. No additives. Just a long line of ATGC' (or any IUPAC DNA/AA code) with no line breaks or fancy symbols.
 
 That is it.
