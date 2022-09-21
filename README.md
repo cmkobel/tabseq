@@ -12,21 +12,32 @@ Working with sequences in a tabular format comes with some series pros. As this 
 
 For instance you can use stringr::sub_str() to extract parts of a sequence, think genes inside a chromosome. You can use dplyr::filter and left_join to filter and join individual genes from different samples or species based on database lookups: For instance, you could use dplyr::inner_join to get the core genes from a set of species. This, you could of course also do with a GFF file, but here you have the option to take the sequences along, and make concatenations, reverse_complements, GC_measurements right off the bat.  
 
-The concept is very simple, and hopefully you will find it to be powerful as well.
+The concept is simple, and hopefully you will find it to be powerful as well. Below, we will walk through a few examples together, to make it clear how this works in practice.
 
 ## So, what does it look like?
 
 Imagine a file containing the 16S gene from two different species.
 The corresponding .tabseq file might look something like this: 
 ```
-sample--------------⇥part--⇥comment--------------------⇥sequence
+#sample--------------⇥part--⇥comment--------------------⇥sequence
 E. coli K12---------⇥16S---⇥strand=+;source=CP329873---⇥ATGAAGAATAAGTTAGGACAGCACTTTTTAAATGACATT...
 S. acidocaldarius---⇥16S---⇥strand=+;source=CP329873---⇥ATGGAGAAAAAGTTATTACAGCACATTTAAAATGAAATT...
 ```
-The ---⇥ symbol is used to illustrate a tab in the file, which would otherwise be invisible.
+(The ---⇥ symbol is used to illustrate a tab in the file, which would otherwise be invisible.)
+
+The first line starting with a `#` symbol is simply the header, defining the four columns that make up the structure of the .tabseq-format. Any line starting with a `#` symbol is interpreted as a comment. Consequently, the header is unecessary, but may be included to make human-reading more straightforward. 
+
+The four columns are required: `sample`, `part`, `comment`, `sequence`. They're all strings. _.tabseq_ files are utf-8 encoded, so you can really put any symbol you'd like. If a feature is not necessary for your project, you can simply fill it with the string: `NA`.
+
+ 1. `sample`: What is the name of your sample? Here you can specify a unique sample name for your project, the public sample name or just the general species.
+ 2. `part`: It might come handy to be able to subset your sequences in any way. The most typical use for part is to specify the name of the gene the sequence represents. Another typical use is to specify the name of the contig represented.
+ 3. `comment`: Just an auxillary column to put metadata or anything really. If you want to encode more than a single variable worth of information, use the semicolon-separated list of name=value pairs, as in the GFF format; for example `GC=0.23;strand=+` etc. The R-package comes with tools to expand and condense these `name=value;` pairs.
+ 4. `sequence`: This is the sequence that the whole format is all about. Just a long line of ATGCs (or any IUPAC DNA/AA code) with no line breaks or fancy symbols.
 
  
+---
 
+Old text:
 
 You probably love fasta. But tell me - can you quickly concatenate all the genes from a fasta alignment of several samples? Can you quickly create a synthetic genome (i.e. core or pan genome) from a list of fasta files containing the harbored genes? If not, then take a look at the _.tabseq_-format.
 
