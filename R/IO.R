@@ -98,6 +98,47 @@ read_gff = function(file, parse_attributes = TRUE) {
 
 
 
+
+#' Read a GFF3 file
+#' @export
+#' @description Read a GFF3 file
+#' @param file A GFF3 file
+#' @param parse_attributes Whether the `attributes` column in the gff should be parsed into separate columns
+#' @return A list of two items: annotation and fasta. The fasta item is read with tabseq::read_fasta()
+#' @examples
+read_gff_possibly_newer = function(file, parse_attributes = TRUE) {
+    write("version a", stderr())
+    col_names = c("seqid", "source", "type", "start", "end", "score", "strand", "phase", "attributes") # Source: https://m.ensembl.org/info/website/upload/gff3.html
+
+    # For debugging
+    #file = "~/assemblycomparator2/tests/E._faecium_plasmids/output_asscom2/samples/VB3240/prokka/VB3240.gff"
+
+    # Find the line number where the fasta file starts
+    file_open = scan(file, what = "character", sep = "\n", quiet = T)
+    annotation_fasta_start_line_number = which(stringr::str_detect(file_open, "^##FASTA"))
+
+
+
+
+    # If there is a fasta part in the gff file, read it with tabseq.
+    if(annotation_fasta_start_line_number |> length() > 0) {
+        write(paste("splitting the file between annotation and fasta at line number:", annotation_fasta_start_line_number), stderr())
+
+        fasta = tabseq::read_fasta(file, skip = annotation_fasta_start_line_number - 1) # Be informed that when you use the skip argument, it counts exclusive of comment lines. Fortunately, no comment argument has been implemented in tabseq::read_fasta().
+    } else {
+        warning("The gff file doesn't contain a fasta part. The fasta item in the return value will be `NA`")
+        annotation_fasta_start_line_number = length(file_open) + 1
+        fasta = NA
+    }
+
+    #annotation = readr::read_tsv(file_open[1:(annotation_fasta_start_line_number - 1)], col_names = col_names, comment = "##")
+    annotation = readr::read_tsv(file, col_names = col_names, skip = 0, n_max = annotation_fasta_start_line_number-1, comment = "#")
+
+    list(annotation = annotation, fasta = fasta)
+}
+
+
+
 # TODO: Consider implementing a View function that strips or simplifies the sequence column.
 
 
