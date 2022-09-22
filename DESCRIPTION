@@ -2,11 +2,17 @@ Package: tabseq
 Title: Fasta-Tidyverse Interface
 Version: 0.1.2
 Authors@R: 
-    person("Carl Mathias", "Kobel", , "kobel@proton.me", role = c("aut", "cre"),
-           comment = c(ORCID = "0000-0002-4461-1159"))
+    person(
+        given = "Carl Mathias", family ="Kobel",
+        email = "kobel@proton.me",
+        role = c("aut", "cre"),
+        comment = c(ORCID = "0000-0002-4461-1159"))
 Description: Tools for handling biological sequences in a tabular format, suited to be interoperable with tidyverse.
-License: `use_mit_license()`
+License: GPL (2)
 Encoding: UTF-8
 Roxygen: list(markdown = TRUE)
 RoxygenNote: 7.2.1
-Imports: dplyr, readr, stringr, tidyr, magrittr
+Imports: dplyr, readr, stringr, magrittr, tidyr
+Suggests: 
+    testthat (>= 3.0.0)
+Config/testthat/edition: 3
