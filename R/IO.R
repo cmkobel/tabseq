@@ -1,6 +1,7 @@
 #' Read a fasta file and convert it to tabseq
 #' @export
 #' @import dplyr stringr tidyr readr
+#' @importFrom magrittr %>%
 #' @description Takes the path to a fasta file. Loads the fasta file, and converts it to a tabseq table.
 #' @param file The path to a fasta-file
 #' @param basename_only If TRUE, the full paths to the files will be truncated in favor of the basename only
@@ -8,9 +9,10 @@
 #' @return A tibble containing the respective records and sequences from the fasta-file, represented in the tabseq format.
 #' @examples
 #'
-#' #my_sequences = read_tabseq("path/to/sequences.fa")
+#' my_sequences = read_tabseq("~/tabseq/examples/random.fasta")
 #'
 read_fasta = function(file, basename_only = T, remove_extension = F, skip = 0) {
+    message("version3234")
 
     # For spontaneous debugging:
     # file = "~/assemblycomparator2/tests/E._faecium_plasmids/VB3240.fna"
@@ -26,29 +28,48 @@ read_fasta = function(file, basename_only = T, remove_extension = F, skip = 0) {
         # Really disappointed in my self, that I couldn't get this below two lines.
     }
 
-    # Open the file
+    # Open the file comment
     message(paste("reading", file, "as fasta", "\n"))
 
-    file_open = scan(file, what = character(), sep = "\n", quiet = T, comment.char = "#") # Not sure about that nmax + 1 thing.
+    file_open = scan(file, what = character(), sep = "\n", quiet = T, skip = skip) # Not sure about that nmax + 1 thing.
+    # Warning: Do not implement comment.char = "#" in scan above. Fastas should not contain comments, and it will fuck up skipping lies
+    # Is there anything in using the skip implemented in scan instead?
 
 
-    rv = dplyr::tibble(raw = file_open[(skip+1):length(file_open)]) %>% # +1 on the skip because skip=1 would actually mean skip none. Why am I not using skip built into scan instead?
+
+    #rv =#dplyr::tibble(raw = file_open[(skip+1):length(file_open)]) %>% # +1 on the skip because skip=1 would actually mean skip none. Why am I not using skip built into scan instead?
+    rv = dplyr::tibble(raw = file_open) %>% # +1 on the skip because skip=1 would actually mean skip none. Why am I not using skip built into scan instead?
+
 
         # detect record headers
         dplyr::mutate(header = dplyr::if_else(stringr::str_sub(raw, 1, 1) == ">", T, F)) %>%
 
         # enumerate the record headers and fill the downwards through the sequence lines
         dplyr::mutate(header_num = ifelse(header, seq.int(nrow(.)), NA)) %>% # needs no sorting
-        tidyr::fill(header_num, .direction = "down") %>%
+        tidyr::fill(header_num, .direction = "down")
+
+    # Check whether the file starts with a header.
+    if (any(is.na(rv$header_num))) {
+        if (skip > 0) {
+            warning(paste("You have skipped not long enough to align with a fasta header. The half-read record will be removed. Check whether your skip =", skip, "argument corresponds to the file you're reading."))
+        } else {
+            warning("File might not be a fasta. The start of the file does not define a header.")
+        }
+    }
+
+
+    rv = rv %>%
+        filter(!is.na(header_num)) %>% # In the case where the user skips an unaligned number of rows, the first, unnamed record should be thrown away. We can do that by filtering out NAs in the header_num column.
+
 
         # Collect the lines for each record
         dplyr::group_by(header_num) %>%
         dplyr::summarize(part = stringr::str_sub(raw[1], 2),
                          sequence = paste(raw[-1], collapse = ""), .groups = "drop") %>%
 
-        dplyr::mutate(comment = paste("record", dplyr::row_number(header_num))) %>%  # reset header nums
+        dplyr::mutate(auxiliary = paste("record", dplyr::row_number(header_num))) %>%  # reset header nums
         #identity()
-        dplyr::transmute(sample = file_presentable, part, comment, sequence)
+        dplyr::transmute(sample = file_presentable, part, auxiliary, sequence)
 
     #cat(paste("parsed", (rv %>% dim)[1], "records", "\n"))
     message(paste("parsed", (rv %>% dim)[1], "records", "\n"))
@@ -97,45 +118,6 @@ read_gff = function(file, parse_attributes = TRUE) {
 }
 
 
-
-
-#' Read a GFF3 file
-#' @export
-#' @description Read a GFF3 file
-#' @param file A GFF3 file
-#' @param parse_attributes Whether the `attributes` column in the gff should be parsed into separate columns
-#' @return A list of two items: annotation and fasta. The fasta item is read with tabseq::read_fasta()
-#' @examples
-read_gff_possibly_newer = function(file, parse_attributes = TRUE) {
-    write("version a", stderr())
-    col_names = c("seqid", "source", "type", "start", "end", "score", "strand", "phase", "attributes") # Source: https://m.ensembl.org/info/website/upload/gff3.html
-
-    # For debugging
-    #file = "~/assemblycomparator2/tests/E._faecium_plasmids/output_asscom2/samples/VB3240/prokka/VB3240.gff"
-
-    # Find the line number where the fasta file starts
-    file_open = scan(file, what = "character", sep = "\n", quiet = T)
-    annotation_fasta_start_line_number = which(stringr::str_detect(file_open, "^##FASTA"))
-
-
-
-
-    # If there is a fasta part in the gff file, read it with tabseq.
-    if(annotation_fasta_start_line_number |> length() > 0) {
-        write(paste("splitting the file between annotation and fasta at line number:", annotation_fasta_start_line_number), stderr())
-
-        fasta = tabseq::read_fasta(file, skip = annotation_fasta_start_line_number - 1) # Be informed that when you use the skip argument, it counts exclusive of comment lines. Fortunately, no comment argument has been implemented in tabseq::read_fasta().
-    } else {
-        warning("The gff file doesn't contain a fasta part. The fasta item in the return value will be `NA`")
-        annotation_fasta_start_line_number = length(file_open) + 1
-        fasta = NA
-    }
-
-    #annotation = readr::read_tsv(file_open[1:(annotation_fasta_start_line_number - 1)], col_names = col_names, comment = "##")
-    annotation = readr::read_tsv(file, col_names = col_names, skip = 0, n_max = annotation_fasta_start_line_number-1, comment = "#")
-
-    list(annotation = annotation, fasta = fasta)
-}
 
 
 
