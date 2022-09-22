@@ -64,6 +64,7 @@ read_fasta = function(file, basename_only = T, remove_extension = F, skip = 0) {
 #' Read a GFF3 file
 #' @export
 #' @description Read a GFF3 file
+#' @import tidyr
 #' @param file A GFF3 file
 #' @param parse_attributes Whether the `attributes` column in the gff should be parsed into separate columns
 #' @return A list of two items: annotation and fasta. The fasta item is read with tabseq::read_fasta()
@@ -88,7 +89,7 @@ read_gff = function(file, parse_attributes = TRUE) {
         fasta = NA
     }
 
-    annotation = read_tsv(file_open[1:(annotation_fasta_split_line_number - 1)], col_names = col_names, comment = "##") |>
+    annotation = read_tsv(file_open[1:(annotation_fasta_split_line_number - 1)], col_names = col_names, comment = "##") %>%
         # View()
         identity()
 
@@ -104,7 +105,7 @@ read_gff = function(file, parse_attributes = TRUE) {
 
 #' Simplify the sequence column for development purposes
 #' @export
-#' @import stringr
+#' @import stringr tidyr
 #' @description Truncates the sequence column
 #' @param input A string of nucleotides
 #' @return A list of two items: annotation and fasta. The fasta item is read with tabseq::read_fasta()

@@ -1,8 +1,7 @@
 
 #' Extracts key=value; pair information in the comment column
 #' @export
-#' @import magrittr
-#' @import readr
+#' @import dplyr readr
 #' @description This function expands tabseq comment key-value pair contents into several columns
 #' @param tabseq A tabseq tibble
 #' @param output_wide Disables the internal pivot_wide call. Defaults to TRUE. By setting this to FALSE you get a longer table instead, with is also computed faster.

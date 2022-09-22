@@ -91,7 +91,7 @@ GC_content_nonvectorized = function(string, position = 0) {
 
 #' Calculate GC content
 #' @export
-#' @import stringr
+#' @import stringr dplyr
 #' @description Calculates GC, GC1 GC2 or GC3 for a given sequence.
 #' @param string A string of nucleotides
 #' @param position The position to look for GC at. 0 (default) means all, 1 means GC1, 2 means GC2 and 3 means GC3.

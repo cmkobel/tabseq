@@ -4,7 +4,7 @@
 \alias{read_fasta}
 \title{Read a fasta file and convert it to tabseq}
 \usage{
-read_fasta(file, basename_only = T, remove_extension = F, skip = 0, nmax = 0)
+read_fasta(file, basename_only = T, remove_extension = F, skip = 0)
 }
 \arguments{
 \item{file}{The path to a fasta-file}
@@ -14,7 +14,7 @@ read_fasta(file, basename_only = T, remove_extension = F, skip = 0, nmax = 0)
 \item{skip}{Skip this number of lines in the file before reading}
 }
 \value{
-A tibble containing the respective records and sequences from the fasta-file. Represented in the tabseq format.
+A tibble containing the respective records and sequences from the fasta-file, represented in the tabseq format.
 }
 \description{
 Takes the path to a fasta file. Loads the fasta file, and converts it to a tabseq table.
