@@ -80,6 +80,11 @@ int kmer_count(CharacterVector sequence_R) {
     int * sequence = (int *) malloc(len_sequence * sizeof(int));
     int * tree = (int *) malloc(pow(4, k) * sizeof(int));
 
+    // Reset tree
+    for (int i = 0; i<pow(4, k); i++) {
+        tree[i] = 0;
+    }
+
     // Make a copy of the sequence_raw with integer coding
     for (int i = 0; i < len_sequence; i++) {
         //printf("%d ", sequence_raw[i]);
