@@ -46,7 +46,7 @@ void node(int position, int index, int tail, int *sequence, int *tree) {
      */
 
     //print(f"{sequence[position]} position {position}, index {bin(index)}, tail {tail}")
-    printf(" %d: position %d, index %d, tail %d\n", sequence[position], position, index, tail);
+    //printf(" %d: position %d, index %d, tail %d\n", sequence[position], position, index, tail);
 
     if (tail == 0) { // Base case
         tree[index] += 1;
@@ -66,14 +66,14 @@ void node(int position, int index, int tail, int *sequence, int *tree) {
 
 //int main() {
 // [[Rcpp::export]]
-IntegerVector kmer_count(CharacterVector sequence_R) {
+IntegerVector kmer_count(NumericVector k_R, CharacterVector sequence_R) {
 
 
-    // Convert to c char array
+    // Convert R inputs to c types
+    int k = k_R[0];
+    printf("k is %d\n", k);
     const char * sequence_raw = ((String) sequence_R[0]).get_cstring();
 
-
-    int k = 2;
 
     // Derived parameters
     int len_sequence = strlen(sequence_raw);
@@ -128,7 +128,7 @@ IntegerVector kmer_count(CharacterVector sequence_R) {
     IntegerVector rv (pow(4, k));
     int sum = 0;
     for (int i = 0; i < pow(4, k); i++) {
-        //char key[] = "";
+        //char key[] = ""; // TODO, fix naming of the rv elements.
         for (int j = k-1; j >= 0; j--) {
             printf("%c", reverse_mapping[(i >> (j*2)) & 3]);
             //strcat(key, (char *) reverse_mapping[(i >> (j*2)) & 3]);

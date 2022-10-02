@@ -5,8 +5,8 @@ mapping <- function(ascii_letter) {
     .Call('_tabseq_mapping', PACKAGE = 'tabseq', ascii_letter)
 }
 
-kmer_count <- function(sequence_R) {
-    .Call('_tabseq_kmer_count', PACKAGE = 'tabseq', sequence_R)
+kmer_count <- function(k_R, sequence_R) {
+    .Call('_tabseq_kmer_count', PACKAGE = 'tabseq', k_R, sequence_R)
 }
 
 rcpp_hello_world <- function() {

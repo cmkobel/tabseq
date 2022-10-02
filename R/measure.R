@@ -117,5 +117,5 @@ GC_content = function(string, position = 0) {
 #' @return An array of lexicographically sorted k-mers counts.
 #' @examples
 ts_kmer_count = function(k, sequence) {
-    kmer_count(sequence)
+    kmer_count(k, sequence)
 }

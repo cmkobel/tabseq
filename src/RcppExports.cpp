@@ -22,13 +22,14 @@ BEGIN_RCPP
 END_RCPP
 }
 // kmer_count
-IntegerVector kmer_count(CharacterVector sequence_R);
-RcppExport SEXP _tabseq_kmer_count(SEXP sequence_RSEXP) {
+IntegerVector kmer_count(NumericVector k_R, CharacterVector sequence_R);
+RcppExport SEXP _tabseq_kmer_count(SEXP k_RSEXP, SEXP sequence_RSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< NumericVector >::type k_R(k_RSEXP);
     Rcpp::traits::input_parameter< CharacterVector >::type sequence_R(sequence_RSEXP);
-    rcpp_result_gen = Rcpp::wrap(kmer_count(sequence_R));
+    rcpp_result_gen = Rcpp::wrap(kmer_count(k_R, sequence_R));
     return rcpp_result_gen;
 END_RCPP
 }
@@ -55,7 +56,7 @@ END_RCPP
 
 static const R_CallMethodDef CallEntries[] = {
     {"_tabseq_mapping", (DL_FUNC) &_tabseq_mapping, 1},
-    {"_tabseq_kmer_count", (DL_FUNC) &_tabseq_kmer_count, 1},
+    {"_tabseq_kmer_count", (DL_FUNC) &_tabseq_kmer_count, 2},
     {"_tabseq_rcpp_hello_world", (DL_FUNC) &_tabseq_rcpp_hello_world, 0},
     {"_tabseq_special_test", (DL_FUNC) &_tabseq_special_test, 0},
     {NULL, NULL, 0}
