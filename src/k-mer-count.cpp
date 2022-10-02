@@ -50,7 +50,7 @@ void node(int position, int index, int tail, int *sequence, int *tree) {
 
     if (tail == 0) { // Base case
         tree[index] += 1;
-        printf(" save\n\n");
+        //printf(" save\n\n");
         return;
         //} else if (position >= len_sequence -1) { // TODO: rememeber to make sure that node() is not called beyond the end of the sequence.
         //    return;
@@ -96,11 +96,11 @@ IntegerVector kmer_count(NumericVector k_R, CharacterVector sequence_R) {
     printf("Length is %d\n", len_sequence);
 
     // present coded sequence
-    printf("Sequence is coded as ");
-    for (int i = 0; i < len_sequence; i++) {
-        printf("%d", sequence[i]);
-    }
-    printf("\n");
+    // printf("Sequence is coded as ");
+    // for (int i = 0; i < len_sequence; i++) {
+    //     printf("%d", sequence[i]);
+    // }
+    // printf("\n");
 
 
 
@@ -116,12 +116,12 @@ IntegerVector kmer_count(NumericVector k_R, CharacterVector sequence_R) {
 
 
 
-    // Present tree
-    printf("Result: ");
-    for (int i = 0; i < pow(4, k); i++) {
-        printf("%d", tree[i]);
-    }
-    printf("\n");
+    // // Present tree
+    // printf("Result: ");
+    // for (int i = 0; i < pow(4, k); i++) {
+    //     printf("%d", tree[i]);
+    // }
+    // printf("\n");
 
 
     // Present tree letters
@@ -135,10 +135,10 @@ IntegerVector kmer_count(NumericVector k_R, CharacterVector sequence_R) {
         }
         int value = tree[i];
         sum += value;
-        printf("\t%d\n", value);
+        //printf("\t%d\n", value);
         rv[i] = value;
     }
-    printf("sum\t%d (%d)\n", sum, len_sequence - k+1);
+    //printf("sum\t%d (%d)\n", sum, len_sequence - k+1);
 
 
 
