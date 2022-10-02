@@ -106,3 +106,16 @@ GC_content = function(string, position = 0) {
     rv
 }
 
+
+
+#' Measure k-mer counts
+#' @export
+#' @import stringr dplyr
+#' @description Counts occurrences of k-mers
+#' @param k the length of the mers wanted. Each of 4^k mers will be measured.
+#' @param sequence A sequence of nucleotides
+#' @return An array of lexicographically sorted k-mers counts.
+#' @examples
+ts_kmer_count = function(k, sequence) {
+    kmer_count(sequence)
+}

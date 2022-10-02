@@ -21,6 +21,6 @@ Takes the path to a fasta file. Loads the fasta file, and converts it to a tabse
 }
 \examples{
 
-#my_sequences = read_tabseq("path/to/sequences.fa")
+my_sequences = read_tabseq("~/tabseq/examples/random.fasta")
 
 }

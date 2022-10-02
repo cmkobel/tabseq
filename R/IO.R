@@ -12,7 +12,6 @@
 #' my_sequences = read_tabseq("~/tabseq/examples/random.fasta")
 #'
 read_fasta = function(file, basename_only = T, remove_extension = F, skip = 0) {
-    message("version3234")
 
     # For spontaneous debugging:
     # file = "~/assemblycomparator2/tests/E._faecium_plasmids/VB3240.fna"
@@ -135,6 +134,7 @@ read_gff = function(file, parse_attributes = TRUE) {
 #' @examples
 ts_neutralize = function(input) {
     message("version x24")
+    rcpp_hello_world()
     input %>%
         mutate(sequence = paste(str_sub(sequence, 1, 10), "(..)"))
 }
