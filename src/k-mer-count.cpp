@@ -66,7 +66,7 @@ void node(int position, int index, int tail, int *sequence, int *tree) {
 
 //int main() {
 // [[Rcpp::export]]
-int kmer_count(CharacterVector sequence_R) {
+IntegerVector kmer_count(CharacterVector sequence_R) {
 
 
     // Convert to c char array
@@ -121,26 +121,22 @@ int kmer_count(CharacterVector sequence_R) {
     for (int i = 0; i < pow(4, k); i++) {
         printf("%d", tree[i]);
     }
+    printf("\n");
 
-
-    // for i in range(4**k):
-    // #    print(tree[i]) # works
-
-    //     for j in reversed(range(k)):
-    //         print(numbers[(i >> (j*2)) & 0b11], end = '')
-    //     value = tree[i]
-    //     sum += value
-    //     print('\t', value, sep = "")
 
     // Present tree letters
+    IntegerVector rv (pow(4, k));
     int sum = 0;
     for (int i = 0; i < pow(4, k); i++) {
+        //char key[] = "";
         for (int j = k-1; j >= 0; j--) {
             printf("%c", reverse_mapping[(i >> (j*2)) & 3]);
+            //strcat(key, (char *) reverse_mapping[(i >> (j*2)) & 3]);
         }
         int value = tree[i];
         sum += value;
         printf("\t%d\n", value);
+        rv[i] = value;
     }
     printf("sum\t%d (%d)\n", sum, len_sequence - k+1);
 
@@ -150,9 +146,10 @@ int kmer_count(CharacterVector sequence_R) {
 
 
 
-    // printf("%d\n", letters);
 
 
 
-    return 0;
+
+    //return 0;
+    return rv;
 }

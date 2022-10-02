@@ -22,7 +22,7 @@ BEGIN_RCPP
 END_RCPP
 }
 // kmer_count
-int kmer_count(CharacterVector sequence_R);
+IntegerVector kmer_count(CharacterVector sequence_R);
 RcppExport SEXP _tabseq_kmer_count(SEXP sequence_RSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
